@@ -1,3 +1,4 @@
+#include <iostream>
 #include "serverfunction.h"
 #include "database.h"
 #include "task1.h"
@@ -23,6 +24,24 @@ QByteArray parse(QString request) {
     }
     else if (method == QString("getUserStat")) {
         response = getUserStat(data_client.at(0));
+    }
+    else if (method == QString("task1")) {
+        QList<int> list;
+        for (const QString& str : data_client) {
+            list.append(str.toInt());
+        }
+        response = executeTask1(list);
+    }
+    else if (method == QString("task2")) {
+        QMap<int, std::pair<int, int>> vertexCoordinates;
+        for (const QString& str : data_client) {
+            QStringList coordinates = str.split(QLatin1Char(' '));
+            int vertex = coordinates.at(0).toInt();
+            int x = coordinates.at(1).toInt();
+            int y = coordinates.at(2).toInt();
+            vertexCoordinates[vertex] = std::make_pair(x, y);
+        }
+        response = executeTask2(vertexCoordinates.size(), vertexCoordinates);
     }
     else {
         // Сообщение об ошибке, если функция не определена
@@ -54,7 +73,7 @@ QByteArray auth(QString login, QString input_password) {
 
     // Сборка ответа в виде строки
     QString responseString;
-    for (auto it = response.constBegin(); it!= response.constEnd(); ++it) {
+    for (auto it = response.constBegin(); it!= response.constEnd(); ++it) {               //ПЕРЕДЕЛАТЬ!
         responseString += it.key() + ": " + it.value().toString() + "\n";
     }
     return responseString.toUtf8();
@@ -72,7 +91,7 @@ QByteArray reg(QString login, QString password, QString email) {
 
     // Сборка ответа в виде строки
     QString responseString;
-    for (auto it = response.constBegin(); it!= response.constEnd(); ++it) {
+    for (auto it = response.constBegin(); it!= response.constEnd(); ++it) {              //REDO
         responseString += it.key() + ": " + it.value().toString() + "\n";
     }
     return responseString.toUtf8();
@@ -95,6 +114,44 @@ QByteArray getUserStat(QString login) {
     }
     return responseString.toUtf8();
 }
+
+QByteArray executeTask1(const QList<int>& list) {
+    // Выполняем задачу
+    QList<int> result = divideListInHalf(list);
+
+    // Формируем ответ
+    QByteArray response = "Задание завершилось. Результат: ";
+    for (int i : result) {
+        response += QByteArray::number(i) + " ";
+    }
+    return response;
+}
+
+/*QByteArray executeTask2(int numVertices, const QMap<int, std::pair<int, int>>& vertexCoordinates) {
+    // Создаем граф
+    Graph graph(numVertices);
+
+    // Добавляем ребра в граф
+    for (int i = 1; i <= numVertices; ++i) {
+        for (int j = i + 1; j <= numVertices; ++j) {
+            int weight = std::sqrt(std::pow(vertexCoordinates[i].first - vertexCoordinates[j].first, 2) +
+                                   std::pow(vertexCoordinates[i].second - vertexCoordinates[j].second, 2));
+            graph.addEdge(i, j, weight);
+        }
+    }
+
+    // Выполняем задачу
+    QMap<int, int> distances = graph.shortestPath(1);
+
+    // Формируем ответ
+    QByteArray response = "Задание завершилось. Кратчайшее расстояние:";
+    for (auto it = distances.begin(); it != distances.end(); ++it) {
+        response += "\nVertex " + QByteArray::number(it.key()) + ": " + QByteArray::number(it.value());
+    }
+    return response;
+}*/
+
+
 
 QString removeLastTwoCharacters(QString str) {
     return str.left(str.length() - 2);

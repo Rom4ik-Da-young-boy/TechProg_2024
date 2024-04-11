@@ -5,6 +5,9 @@
 #include <QMap>
 #include <QSet>
 
+QByteArray executeTask2(int numVertices, const QMap<int, std::pair<int, int>>& vertexCoordinates);
+
+
 class Graph {
 public:
     Graph(int vertices) : numVertices(vertices) {}

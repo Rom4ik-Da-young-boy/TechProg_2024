@@ -25,6 +25,8 @@ QByteArray reg(QString log, QString pass, QString email);
 QByteArray checkTask(QString taskId, QString variant, QString answer);
 QByteArray getTask(QString);
 QByteArray getUserStat(QString login);
-QString removeLastFourCharacters(QString request);
+QString removeLastTwoCharacters(QString request);
+QByteArray executeTask1();
+QByteArray executeTask2();
 
 #endif // SERVERFUNCTION_H

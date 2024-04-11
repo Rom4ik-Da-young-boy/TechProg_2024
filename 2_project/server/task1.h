@@ -3,7 +3,8 @@
 
 #include <QList>
 
-template <typename T>
-QList<T> divideListInHalf(const QList<T>& list);
+QList<int> divideListInHalf(const QList<int>& list);
+
+QByteArray executeTask1(const QList<int>& list);
 
 #endif // TASK1_H
