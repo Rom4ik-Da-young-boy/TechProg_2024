@@ -1,0 +1,16 @@
+# Используем базовый образ Linux
+FROM ubuntu:latest
+
+# Устанавливаем необходимые пакеты
+RUN apt-get update && apt-get install -y \
+    nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./project /app
+
+# Открываем порт 80 для веб-сервера nginx
+EXPOSE 80
+
+# Запускаем nginx при старте контейнера
+CMD ["nginx", "-g", "daemon off;"]
+
